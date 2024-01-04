@@ -42,6 +42,7 @@ export const App = () => {
    
     imagesAPI(name, page)
       .then(data => {
+        
         setHits(data.hits);
         setTotal(data.total);
         
@@ -49,39 +50,20 @@ export const App = () => {
       .finally(() => {
         setIsLoading(false);
         setVisibleButton(page < Math.ceil(total / 12));
+        
       })
       .catch((error) => {
-        console.error(error.message);
-        Notiflix.Notify.failure('Images no found');
+        console.error(error);
+        
       })
+
+      
     }
+    if ( total === 0 && name !== '')  Notiflix.Notify.failure('Images no found');
     
     
   }, [name, page, total]);
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { name, page } = this.state;
-    
-  //   if (prevState.name !== name || prevState.page !== page) {
-  //     this.setState({ isLoading: true});
-  //     imagesAPI(name, page)
-  //       .then(({ hits, total }) => {
-  //         this.setState(prevState => (
-  //           {
-  //             hits: [...prevState.hits, ...hits],
-  //             total: total,
-  //             visibleButton: this.state.page < Math.ceil(total/12)
-  //         }
-  //         ))
-  //       })
-  //       .finally(() => this.setState({ isLoading: false }))
-  //       .catch((error) => {
-  //         console.error(error.message);
-  //         Notiflix.Notify.failure('Images no found');
-  //       });
-  //   };
-    
 
-  // };
 
     return (
       <>
