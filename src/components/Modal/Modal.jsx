@@ -10,7 +10,7 @@ export const Modal = ({ onClick, url, alt }) => {
 
     useEffect(() => {
         const handleKeyDown = evt => {
-            if (evt.currentTarget === 'Escape') {
+            if (evt.code === 'Escape') {
                 onClick();
             }
         }
