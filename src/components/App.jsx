@@ -33,33 +33,40 @@ export const App = () => {
     setName(name);
     setPage(1);
     setHits([]);
+    setTotal(0);
   };
 
   useEffect(() => {
     if (name !== '') {
-    
-    setIsLoading(true);
-   
-    imagesAPI(name, page)
-      .then(data => {
-        
-        setHits(data.hits);
-        setTotal(data.total);
-        
-      })
-      .finally(() => {
-        setIsLoading(false);
-        setVisibleButton(page < Math.ceil(total / 12));
-        
-      })
-      .catch((error) => {
-        console.error(error);
-        
-      })
-
       
+      setIsLoading(true);
+    
+      imagesAPI(name, page)
+        .then(data => {
+          if (data.hits.length === 0 && data.hits.length === data.total) {
+            Notiflix.Notify.failure('Images no found');
+            return;
+          };
+          if (page !== 1) {
+            setHits(prevHits => [...prevHits, ...data.hits]);
+            return;
+          }
+          setHits(data.hits)
+          setTotal(data.total);
+          
+          
+        
+        })
+        .finally(() => {
+          setIsLoading(false);
+          setVisibleButton(page < Math.ceil(total / 12));
+        
+        })
+        .catch((error) => {
+          console.error(error);
+        })
     }
-    if ( total === 0 && name !== '')  Notiflix.Notify.failure('Images no found');
+    
     
     
   }, [name, page, total]);
